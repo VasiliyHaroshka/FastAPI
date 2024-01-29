@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database.db import get_db
@@ -16,6 +18,11 @@ async def create(data: user_schema.User, db: Session = Depends(get_db)):
 @router.get("/{id}", tags=["user"])
 async def get(id: int = None, db: Session = Depends(get_db)):
     return user_service.get_user(id, db)
+
+
+@router.get("/all/", response_model=List[user_schema.User], tags=["user"])
+async def get_all_users(db: Session = Depends(get_db)):
+    return user_service.get_users(db)
 
 
 @router.put("/{id}", tags=["user"])

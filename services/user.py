@@ -3,14 +3,14 @@ from sqlalchemy.orm import Session
 from schemas import user
 
 
-def create_user(data: user.User, db):
+def create_user(data: user.User, db: Session):
     """Create user in database"""
     user = User(username=data.username)
 
     try:
         db.add(user)
         db.commit()
-        db.refresh()
+        db.refresh(user)
     except Exception as e:
         print(e)
 
@@ -18,8 +18,13 @@ def create_user(data: user.User, db):
 
 
 def get_user(id: int, db: Session):
-    "Get user by username"
+    "Get user by id"
     return db.query(User).filter(User.id == id).first()
+
+
+def get_users(db: Session):
+    "Get all users from db"
+    return db.query(User).all()
 
 
 def update_user(data: user.User, id: int, db: Session):
