@@ -1,9 +1,12 @@
-from models.user import User
+from typing import Annotated
+
 from sqlalchemy.orm import Session
-from schemas import user
+from fastapi import Path
+
+from user.models import User
 
 
-def create_user(data: user.User, db: Session):
+def create_user(data: User, db: Session):
     """Create user in database"""
     user = User(username=data.username)
 
@@ -17,7 +20,7 @@ def create_user(data: user.User, db: Session):
     return user
 
 
-def get_user(id: int, db: Session):
+def get_user(id: Annotated[int, Path(ge=1, lt=1_000_000)], db: Session):
     "Get user by id"
     return db.query(User).filter(User.id == id).first()
 
@@ -27,7 +30,7 @@ def get_users(db: Session):
     return db.query(User).all()
 
 
-def update_user(data: user.User, id: int, db: Session):
+def update_user(data: User, id: Annotated[int, Path(ge=1, lt=1_000_000)], db: Session):
     """Update username by id"""
     user = db.query(User).filter(User.id == id).first()
     user.username = data.username
@@ -39,7 +42,7 @@ def update_user(data: user.User, id: int, db: Session):
     return user
 
 
-def delete_user(id: int, db: Session):
+def delete_user(id: Annotated[int, Path(ge=1, lt=1_000_000)], db: Session):
     """Delete user by id"""
     user = db.query(User).filter(User.id == id).delete()
     db.commit()
