@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, DeclarativeBase, Mapped, mapped_column, declared_attr
 
 from config import DATA_BASE, DATA_BASE_FRAMEWORK, USER_NAME, USER_PASSWORD, URL, PORT, DB_NAME
 
@@ -12,7 +12,16 @@ engine = create_engine(
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+
+
+class Base(DeclarativeBase):
+    __absctract__ = True
+
+    @declared_attr.directive
+    def __table_name__(cls) -> str:
+        return f"{cls.__name__.lower}s"
+
+    id: Mapped = mapped_column(primary_key=True)
 
 
 def get_db():
