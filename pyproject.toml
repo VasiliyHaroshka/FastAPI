@@ -11,7 +11,12 @@ fastapi = {extras = ["all"], version = "^0.109.2"}
 sqlalchemy = "^2.0.25"
 uvicorn = "^0.27.0.post1"
 psycopg2 = "^2.9.9"
+alembic = "^1.13.1"
+pydantic = {extras = ["email"], version = "^2.6.1"}
 
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.2.0"
 
 [build-system]
 requires = ["poetry-core"]
